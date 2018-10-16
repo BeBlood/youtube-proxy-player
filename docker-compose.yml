@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+    app:
+        image: "youtube-proxy-player/node"
+        deploy:
+            labels:
+                traefik.backend: "youtube-prpoxy-player-node"
+                traefik.frontend.rule: "Host: youtube.docker"
+                traefik.docker.network: dev_reverse_proxy
+                traefik.port: 8080
+        volumes:
+          - ./:/usr/src/app
+          - /usr/src/app/node_modules
+        networks:
+            - dev_reverse_proxy
+
+networks:
+    dev_reverse_proxy:
+        external: true
