@@ -19,11 +19,14 @@ class Ajax {
         xhr.send();
     }
     buildUrl(query) {
-        var url = query.url + '?';
+        if (query.parameters === undefined || query.parameters === null) {
+            return query.url;
+        }
 
+        var url = query.url + '?';
         var queryParameters = Object.values(query.parameters);
         var parameterNames = Object.keys(query.parameters);
-        console.log(queryParameters.length);
+
         for (var i = 0; i < queryParameters.length; i++) {
             url += parameterNames[i] + '=' + queryParameters[i];
             if (i !== parameterNames.length - 1) {
