@@ -7,11 +7,13 @@
     <link rel="shortcut icon" href="logo.png">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+
 </head>
 <body>
 <main>
     <div id="page">
-        <div>
+        <div class="leftBloc">
             <div id="video">
                 <div id="overlay">
                     <img src="img/stop.png" alt="">
@@ -24,23 +26,20 @@
             <div id="controls">
                 <div id="play"><img class="image" src="img/play.png" alt="play"></div>
                 <div id="pause"><img class="image" src="img/pause.png" alt="pause"></div>
-                <div id="stop"><img class="image" src="img/stop.png" alt="stop"></div>
-                <div id="next"><img class="image" src="img/next.png" alt="next"></div>
                 <div id="fullscreen"><img class="image" src="img/fullscreen.png" alt="fullscreen"></div>
                 <div id="progress" class="tooltip">
                     <div>0%</div>
                 </div>
             </div>
         </div>
-        <ul id="playlist">
-            <li class="header">Liste de lecture <a id="toogleModal" class="right btn" href="#">Ajouter</a></li>
-        </ul>
-    </div>
-    <div id="modal">
-        <div>
-            <label for="link">Lien vers la vidéo ou le flux rss</label>
-            <input id="link" type="text">
-            <button>Valider</button>
+        <div class="rightBloc">
+            <div class="searchVideo">
+                <input placeholder="Rechercher une vidéo" type="text" id="inputSearchVideo" class="search">
+                <i id="btnSearch" class="fas fa-search"></i>
+            </div>
+            <ul id="results">
+
+            </ul>
         </div>
     </div>
     <script src="js/main.js"></script>
