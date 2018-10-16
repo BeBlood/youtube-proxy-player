@@ -25,6 +25,11 @@ class Template {
             return;
         });
     }
+    toElement(templateText) {
+        var div = document.createElement('div');
+        div.innerHTML = templateText.trim();
+        return div.firstChild;
+    }
 }
 
 Template = new Template();
