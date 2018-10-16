@@ -21,7 +21,7 @@
                 <div id="volume-container" class="hidden">
                     <input id="volume" type="range" min="0" max="100" value="50" class="slider">
                 </div>
-                <video src="null"></video>
+                <div id="player"></div>
             </div>
             <div id="controls">
                 <div id="play"><img class="image" src="img/play.png" alt="play"></div>
@@ -42,9 +42,10 @@
             </ul>
         </div>
     </div>
-    <script src="js/main.js"></script>
 </main>
 <footer>
-
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="js/ajax.js"></script>
+    <script src="js/main.js"></script>
 </footer>
 </body></html>
