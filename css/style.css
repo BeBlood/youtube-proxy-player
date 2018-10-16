@@ -81,12 +81,13 @@ Video
     background-color: #222222;
 }
 
-video {
+#player {
     height: 80vh;
     width: 70%;
     position: absolute;
     top:0;
     left:0;
+    border: 0;
 }
 
 /**
