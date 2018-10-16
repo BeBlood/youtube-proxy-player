@@ -45,7 +45,7 @@ window.addEventListener("load", function() {
             Ajax.get({
                 url: 'https://www.googleapis.com/youtube/v3/search',
                 parameters: {
-                    'maxResults': '5',
+                    'maxResults': '7',
                     'part': 'snippet',
                     'type': 'video',
                     'relatedToVideoId': videoId,
