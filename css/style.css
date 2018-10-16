@@ -189,6 +189,8 @@ Video
     margin-top: 0;
     padding: 10px;
     overflow-x: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 #relatedVideos::-webkit-scrollbar, #results::-webkit-scrollbar{
     display: none;
