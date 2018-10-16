@@ -2,11 +2,13 @@ window.addEventListener("load", function() {
 
     class App {
         constructor() {
-            this.youtubePlayer = new YoutubePlayer('player');
-            this.SearchBar = new SearchBar();
+            this.YoutubePlayer = new YoutubePlayer('player');
+            this.SearchBar = new SearchBar('.searchVideo');
+            this.SearchList = new SearchList('#results');
         }
-        search(query) {
-            var results = this.SearchBar.search(search);
+        reloadList(results) {
+            this.SearchList.updateData(results);
+            this.SearchList.reload();
         }
     }
 
@@ -21,7 +23,7 @@ window.addEventListener("load", function() {
                     'onStateChange': this.onPlayerStateChange
                 },
                 playerVars: {
-                    autoplay: 1,
+                    autoplay: 0,
                     modestbranding: 1,
                     rel: 0
                 }
@@ -42,8 +44,25 @@ window.addEventListener("load", function() {
     }
 
     class SearchBar {
-        constructor() {
+        constructor(selector) {
+            this.container = document.querySelector(selector);
+            this.button = this.container.querySelector('i');
+            this.input = this.container.querySelector('input');
 
+            this.loadEvents();
+        }
+        loadEvents() {
+            var self = this;
+
+            this.button.addEventListener('click', function (event) {
+                self.search(self.input.value);
+            });
+
+            this.input.addEventListener('keypress', function (event) {
+                if (event.key === 'Enter') {
+                    self.search(self.input.value);
+                }
+            });
         }
         search(query) {
             Ajax.get({
@@ -56,17 +75,56 @@ window.addEventListener("load", function() {
                     'key': 'AIzaSyB5a5cSSfgexSJEZAosLPCrxpIj-oRXaa4'
                 }
             }, function (results) {
-                console.log(results);
+                app.reloadList(JSON.parse(results));
             });
         }
     }
 
     class SearchList {
-        constructor() {
+        constructor(id) {
+            this.element = document.querySelector(id);
+            this.clearAll();
+        }
+        append(videoData) {
 
+        }
+        reload() {
+            var self = this;
+            this.clearElement();
+
+            Template.load({
+                'name': 'video'
+            }, function (result) {
+                self.data.items.forEach(function (video) {
+                    var parsedResult = Template.update(result, {
+                        'videoId': video.id.videoId,
+                        'titre': video.snippet.title,
+                        'imageSrc': video.snippet.thumbnails.medium.url,
+                        'channel': video.snippet.channelTitle,
+                        'date': video.snippet.publishedAt
+                    });
+
+                    console.log(parsedResult);
+                })
+            });
+        }
+        clearAll() {
+            this.clearData();
+            this.clearElement();
+        }
+        clearData() {
+            this.data = {};
+
+        }
+        clearElement() {
+            while (this.element.firstChild) {
+                this.element.removeChild(this.element.firstChild);
+            }
+        }
+        updateData(data) {
+            this.data = data;
         }
     }
 
     app = new App();
-    //app.SearchBar.search('test');
 });
