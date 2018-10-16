@@ -5,6 +5,9 @@ window.addEventListener("load", function() {
             this.youtubePlayer = new YoutubePlayer('player');
             this.SearchBar = new SearchBar();
         }
+        search(query) {
+            var results = this.SearchBar.search(search);
+        }
     }
 
     class YoutubePlayer {
@@ -65,5 +68,5 @@ window.addEventListener("load", function() {
     }
 
     app = new App();
-    app.SearchBar.search('test');
+    //app.SearchBar.search('test');
 });
