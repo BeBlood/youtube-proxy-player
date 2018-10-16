@@ -124,7 +124,7 @@ window.addEventListener("load", function() {
                     self.data.items.forEach(function (video) {
                         var parsedResult = Template.update(result, {
                             'videoId': video.id.videoId,
-                            'titre': video.snippet.title.substr(0, 10) + ' ...',
+                            'titre': video.snippet.title.substr(0, 20) + ' ...',
                             'imageSrc': video.snippet.thumbnails.medium.url,
                             'channel': video.snippet.channelTitle,
                             'date': moment(video.snippet.publishedAt).fromNow()
