@@ -206,6 +206,13 @@ Video
     width: 150px;
 }
 
+.overlay {
+    opacity: 0;
+    background-color: rgba(0, 0, 0);
+    position: absolute;
+    z-index: 999;
+    transition: opacity 0.5s;
+}
 
 @media screen and (max-width: 1000px){
     .rightBloc{
