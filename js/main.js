@@ -120,7 +120,7 @@ window.addEventListener("load", function() {
                     console.log(video);
                     var parsedResult = Template.update(result, {
                         'videoId': video.id.videoId,
-                        'titre': video.snippet.title,
+                        'titre': video.snippet.title.substr(0, 10) + ' ...',
                         'imageSrc': video.snippet.thumbnails.medium.url,
                         'channel': video.snippet.channelTitle,
                         'date': video.snippet.publishedAt
