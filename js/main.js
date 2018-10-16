@@ -41,6 +41,7 @@ window.addEventListener("load", function() {
                 'videoId': videoId
             });
 
+            app.OverlayCollection.create('#relatedVideos');
             Ajax.get({
                 url: 'https://www.googleapis.com/youtube/v3/search',
                 parameters: {
@@ -133,6 +134,7 @@ window.addEventListener("load", function() {
                     });
 
                     app.OverlayCollection.destroy('.rightBloc');
+                    app.OverlayCollection.destroy('#relatedVideos');
                 }, fakeLoadingDelay);
             });
         }
