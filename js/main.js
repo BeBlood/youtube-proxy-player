@@ -221,6 +221,13 @@ window.addEventListener("load", function() {
             var element = this.element;
             setTimeout(function () {
                 element.style.opacity = 0.5;
+
+                Template.load({'name': 'loader'}, function (result) {
+                    var loader = Template.toElement(result);
+                    loader.style.left = `${position.width / 2 - loader.getAttribute('width') / 2}px`;
+                    loader.style.top = `${position.height / 2 - loader.getAttribute('height')}px`;
+                    element.append(loader);
+                });
             }, 10);
             container.parentNode.append(this.element);
         }
