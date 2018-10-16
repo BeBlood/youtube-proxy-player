@@ -9,7 +9,8 @@ html {
 body {
     margin:0;
     padding: 0;
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: hidden;
 }
 
 .right {
@@ -36,10 +37,11 @@ Grille
 }
 
 .leftBloc{
-    width: 70vw;
+    width: 80vw;
+    overflow: hidden;
 }
 .rightBloc{
-    width: 30vw;
+    width: 20vw;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -48,6 +50,8 @@ Grille
     background-color: #0e8c8c;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
+    overflow-y: scroll;
+    height: 100vh;
 }
 .searchVideo{
     width: 100%;
@@ -69,8 +73,8 @@ Grille
 #btnSearch{
     cursor: pointer;
     position: absolute;
-    right: 25px;
-    top: 30px;
+    right: 40px;
+    top: 33px;
 }
 
 
@@ -86,7 +90,7 @@ Video
 
 #player {
     height: 80vh;
-    width: 70%;
+    width: 80%;
     position: absolute;
     top:0;
     left:0;
@@ -222,26 +226,13 @@ Controls
     opacity: 1;
 }
 
-#overlay {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    background-color: #0f0f10;
-    opacity: 0.4;
-    z-index: 999;
-}
-
-#overlay > img {
-    position: relative;
-    top:30vh;
-    left:40%;
-}
 
 .video{
     display: flex;
     flex-direction: column;
     max-width: 100%;
     margin-bottom: 20px;
+    cursor: pointer;
 }
 .video img{
     width: 100%;
@@ -270,4 +261,55 @@ Controls
 #results{
     padding-left: 0;
     margin-top: 30px;
+}
+
+@media screen and (max-width: 1000px){
+    .rightBloc{
+        width: 200px;
+    }
+    .leftBloc{
+        width: calc(100% - 200px);
+    }
+    #player{
+        width: calc(100% - 200px);
+    }
+}
+
+@media screen and (max-width: 600px){
+    #page{
+        flex-direction: column-reverse;
+    }
+    .rightBloc, .leftBloc, #player{
+        width: 100vw;
+    }
+    .rightBloc{
+        height: 300px;
+        overflow-y: hidden;
+        padding-bottom: 0;
+    }
+    #results{
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        width: 100vw;
+        border-bottom: 0;
+    }
+    #player{
+        margin-top: 300px;
+        height: calc(100vh - 450px);
+    }
+    .leftBloc{
+        height: calc(100% - 300px);
+    }
+    .video{
+        margin-right: 20px;
+    }
+    .video img{
+        width: 150px;
+    }
+
+    #video{
+        height: calc(100vh - 450px);
+    }
 }
