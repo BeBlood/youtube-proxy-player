@@ -1,0 +1,6 @@
+<li class="video" data-id="{{ videoId }}">
+    <img src="{{ imageSrc }}">
+    <span class="videoTitle">{{ titre }}</span>
+    <span class="videoChaine">{{ channel }}</span>
+    <span class="videoDate">{{ date }}</span>
+</li>
