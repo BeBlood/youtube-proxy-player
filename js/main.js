@@ -4,11 +4,16 @@ window.addEventListener("load", function() {
         constructor() {
             this.YoutubePlayer = new YoutubePlayer('player');
             this.SearchBar = new SearchBar('.searchVideo');
-            this.SearchList = new SearchList('#results');
+            this.SearchList = new VideoList('#results');
+            this.RelatedVideoList = new VideoList('#relatedVideos');
         }
-        reloadList(results) {
+        reloadSearchList(results) {
             this.SearchList.updateData(results);
             this.SearchList.reload();
+        }
+        reloadRelatedVideoList(results) {
+            this.RelatedVideoList.updateData(results);
+            this.RelatedVideoList.reload();
         }
     }
 
@@ -29,17 +34,29 @@ window.addEventListener("load", function() {
                 }
             });
         }
+        load(videoId) {
+            this.player.loadVideoById({
+                'videoId': videoId
+            });
+
+            Ajax.get({
+                url: 'https://www.googleapis.com/youtube/v3/search',
+                parameters: {
+                    'maxResults': '5',
+                    'part': 'snippet', //
+                    'type': 'video',
+                    'relatedToVideoId': videoId,
+                    'key': 'AIzaSyB5a5cSSfgexSJEZAosLPCrxpIj-oRXaa4'
+                }
+            }, function (results) {
+                app.reloadRelatedVideoList(JSON.parse(results));
+            });
+        }
         onReady() {
             console.log('ready');
         }
         onPlayerStateChange() {
             console.log('state change');
-        }
-    }
-
-    class ProgressBar {
-        constructor() {
-
         }
     }
 
@@ -71,22 +88,26 @@ window.addEventListener("load", function() {
                     'maxResults': '25',
                     'part': 'snippet',
                     'q': query,
-                    'type': '',
+                    'type': 'video',
                     'key': 'AIzaSyB5a5cSSfgexSJEZAosLPCrxpIj-oRXaa4'
                 }
             }, function (results) {
-                app.reloadList(JSON.parse(results));
+                app.reloadSearchList(JSON.parse(results));
             });
         }
     }
 
-    class SearchList {
-        constructor(id) {
-            this.element = document.querySelector(id);
+    class VideoList {
+        constructor(selector) {
+            this.element = document.querySelector(selector);
             this.clearAll();
         }
-        append(videoData) {
+        append(element) {
+            this.element.append(element);
 
+            element.addEventListener('click', function (event) {
+                app.YoutubePlayer.load(this.dataset.id);
+            });
         }
         reload() {
             var self = this;
@@ -96,6 +117,7 @@ window.addEventListener("load", function() {
                 'name': 'video'
             }, function (result) {
                 self.data.items.forEach(function (video) {
+                    console.log(video);
                     var parsedResult = Template.update(result, {
                         'videoId': video.id.videoId,
                         'titre': video.snippet.title,
@@ -104,7 +126,7 @@ window.addEventListener("load", function() {
                         'date': video.snippet.publishedAt
                     });
 
-                    console.log(parsedResult);
+                    self.append(Template.toElement(parsedResult));
                 })
             });
         }
