@@ -1,15 +1,18 @@
 window.addEventListener("load", function() {
+    var fakeLoadingDelay = 1000;
+    moment.locale('fr');
 
     class App {
         constructor() {
             this.YoutubePlayer = new YoutubePlayer('player');
             this.SearchBar = new SearchBar('.searchVideo');
-            this.SearchList = new VideoList('#results');
+            this.SearchVideoList = new VideoList('#results');
             this.RelatedVideoList = new VideoList('#relatedVideos');
+            this.OverlayCollection = new OverlayCollection();
         }
-        reloadSearchList(results) {
-            this.SearchList.updateData(results);
-            this.SearchList.reload();
+        reloadSearchVideoList(results) {
+            this.SearchVideoList.updateData(results);
+            this.SearchVideoList.reload();
         }
         reloadRelatedVideoList(results) {
             this.RelatedVideoList.updateData(results);
@@ -22,7 +25,6 @@ window.addEventListener("load", function() {
             this.player = new YT.Player(id, {
                 height: '360',
                 width: '640',
-                videoId: 'M7lc1UVf-VE',
                 events: {
                     'onReady': this.onPlayerReady,
                     'onStateChange': this.onPlayerStateChange
@@ -43,7 +45,7 @@ window.addEventListener("load", function() {
                 url: 'https://www.googleapis.com/youtube/v3/search',
                 parameters: {
                     'maxResults': '5',
-                    'part': 'snippet', //
+                    'part': 'snippet',
                     'type': 'video',
                     'relatedToVideoId': videoId,
                     'key': 'AIzaSyB5a5cSSfgexSJEZAosLPCrxpIj-oRXaa4'
@@ -82,6 +84,7 @@ window.addEventListener("load", function() {
             });
         }
         search(query) {
+            app.OverlayCollection.create('.rightBloc');
             Ajax.get({
                 url: 'https://www.googleapis.com/youtube/v3/search',
                 parameters: {
@@ -92,7 +95,7 @@ window.addEventListener("load", function() {
                     'key': 'AIzaSyB5a5cSSfgexSJEZAosLPCrxpIj-oRXaa4'
                 }
             }, function (results) {
-                app.reloadSearchList(JSON.parse(results));
+                app.reloadSearchVideoList(JSON.parse(results));
             });
         }
     }
@@ -116,18 +119,21 @@ window.addEventListener("load", function() {
             Template.load({
                 'name': 'video'
             }, function (result) {
-                self.data.items.forEach(function (video) {
-                    console.log(video);
-                    var parsedResult = Template.update(result, {
-                        'videoId': video.id.videoId,
-                        'titre': video.snippet.title.substr(0, 10) + ' ...',
-                        'imageSrc': video.snippet.thumbnails.medium.url,
-                        'channel': video.snippet.channelTitle,
-                        'date': video.snippet.publishedAt
+                setTimeout(function () { // Juste pour la classe
+                    self.data.items.forEach(function (video) {
+                        var parsedResult = Template.update(result, {
+                            'videoId': video.id.videoId,
+                            'titre': video.snippet.title.substr(0, 10) + ' ...',
+                            'imageSrc': video.snippet.thumbnails.medium.url,
+                            'channel': video.snippet.channelTitle,
+                            'date': moment(video.snippet.publishedAt).fromNow()
+                        });
+
+                        self.append(Template.toElement(parsedResult));
                     });
 
-                    self.append(Template.toElement(parsedResult));
-                })
+                    app.OverlayCollection.destroy('.rightBloc');
+                }, fakeLoadingDelay);
             });
         }
         clearAll() {
@@ -136,7 +142,6 @@ window.addEventListener("load", function() {
         }
         clearData() {
             this.data = {};
-
         }
         clearElement() {
             while (this.element.firstChild) {
@@ -145,6 +150,84 @@ window.addEventListener("load", function() {
         }
         updateData(data) {
             this.data = data;
+        }
+    }
+
+    class OverlayCollection {
+        constructor() {
+            this.overlays = [];
+        }
+        has(selector) {
+            console.log(this.overlays);
+            var result = false;
+
+            this.overlays.forEach(function (overlay) {
+                if (overlay.selector === selector) {
+                    result = true;
+                    return;
+                }
+            });
+
+            return result;
+        }
+        get(selector) {
+            console.log(this.overlays);
+            var result = undefined;
+
+            this.overlays.forEach(function (overlay) {
+                if (overlay.selector === selector) {
+                    result = overlay;
+                    return;
+                }
+            });
+
+            return result;
+        }
+        create(selector) {
+            console.log(this.overlays);
+            if (this.has(selector)) {
+                return selector;
+            }
+
+            this.overlays.push(new Overlay(selector));
+        }
+        destroy(selector) {
+            if (!this.has(selector)) {
+                return;
+            }
+
+            this.get(selector).destroy();
+            this.overlays.splice(this.get(selector), 1);
+            delete this.selector;
+        }
+    }
+
+    class Overlay {
+        constructor(selector) {
+            this.selector = selector;
+            var container = document.querySelector(selector);
+            var position = container.getBoundingClientRect();
+
+            this.element = document.createElement('div');
+            this.element.classList.add('overlay');
+
+            this.element.style.width =  `${position.width}px`;
+            this.element.style.height = `${position.height}px`;
+            this.element.style.left = `${position.x}px`;
+            this.element.style.top = `${position.y}px`;
+
+            var element = this.element;
+            setTimeout(function () {
+                element.style.opacity = 0.5;
+            }, 10);
+            container.parentNode.append(this.element);
+        }
+        destroy() {
+            var element = this.element;
+            element.style.opacity = 0;
+            setTimeout(function () {
+                this.element.parentNode.removeChild(this.element);
+            }, 500);
         }
     }
 
