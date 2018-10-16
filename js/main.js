@@ -224,9 +224,9 @@ window.addEventListener("load", function() {
         }
         destroy() {
             var element = this.element;
-            element.style.opacity = 0;
+            this.element.style.opacity = 0;
             setTimeout(function () {
-                this.element.parentNode.removeChild(this.element);
+                element.parentNode.removeChild(element);
             }, 500);
         }
     }
