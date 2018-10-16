@@ -1,0 +1,15 @@
+{
+  "name": "youtube-proxy-player",
+  "version": "0.1.0",
+  "description": "Youtube Procy Player",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Benjamin Boudier <benjamin.boudier4@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "http-server": "^0.11.1",
+    "yion": "^1.3.0"
+  }
+}
